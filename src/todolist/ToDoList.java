@@ -4,6 +4,8 @@
  */
 package todolist;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Aluno
@@ -14,7 +16,13 @@ public class ToDoList {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-    }
-    
-}
+        Scanner scanner = new Scanner(System.in);
+        //teste
+        String [] Tarefas = new String[10]; 
+       int quantidade = 0;
+       int opcao;
+       
+       
+       do { 
+ 
+       } while(opcao != 0 )

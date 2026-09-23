@@ -4,6 +4,16 @@
  */
 package todolist;
 
+import java.awt.HeadlessException;
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Aluno
@@ -12,13 +22,35 @@ public class TelaToDoList extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaToDoList.class.getName());
 
+    DefaultTableModel model; 
+    
+    private static final String CONCLUIDA = "Concluida";
+    private static final String NAO_CONCLUIDA = "nao concluida";
+    
+    private final ArrayList<String> tarefas = new ArrayList<>();
+    private final ArrayList<String> tarefasfiltradas = new ArrayList<>();
+    
+    public TelaToDoList(JButton jButtonAdicionarTarefa, JButton jButtonConcluirTarefa, JButton jButtonRemoverTarefa, JComboBox<String> jComboBoxFiltroStatus, JScrollPane jScrollPane1, JTable jTableTarefas, JTextField jTextFieldDescricaoTarefa) throws HeadlessException {
+        this.jButtonAdicionarTarefa = jButtonAdicionarTarefa;
+        this.jButtonConcluirTarefa = jButtonConcluirTarefa;
+        this.jButtonRemoverTarefa = jButtonRemoverTarefa;
+        this.jComboBoxFiltroStatus = jComboBoxFiltroStatus;
+        this.jScrollPane1 = jScrollPane1;
+        this.jTableTarefas = jTableTarefas;
+        this.jTextFieldDescricaoTarefa = jTextFieldDescricaoTarefa;
+    }
+     
     /**
      * Creates new form TelaToDoList
      */
     public TelaToDoList() {
         initComponents();
+        
+        setLocationRelativeTo(null);
+        
+        model = (DefaultTableModel) jTableTarefas.getModel();
     }
-
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,6 +71,7 @@ public class TelaToDoList extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButtonAdicionarTarefa.setText("Adicionar");
+        jButtonAdicionarTarefa.addActionListener(this::jButtonAdicionarTarefaActionPerformed);
 
         jComboBoxFiltroStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "concluido", "não concluido" }));
         jComboBoxFiltroStatus.addActionListener(this::jComboBoxFiltroStatusActionPerformed);
@@ -93,7 +126,7 @@ public class TelaToDoList extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButtonConcluirTarefa)
-                .addGap(63, 63, 63)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonRemoverTarefa)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -126,9 +159,52 @@ public class TelaToDoList extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonConcluirTarefaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jButtonAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarTarefaActionPerformed
+       
+        
+        if (jTextFieldDescricaoTarefa.getText().trim().isEmpty() ) { 
+            JOptionPane.showMessageDialog(null, "A descricao da tarefa nao pode ser vazia!");
+            return; 
+            
+            
+            
+            }
+           if (hasTarefaRepetida(jTextFieldDescricaoTarefa.getText())){
+             JOptionPane.showMessageDialog(null,  "A tarefa " + jTextFieldDescricaoTarefa.getText() + "ja existe");
+             return;
+        }
+       tarefas.add(jTextFieldDescricaoTarefa.getText() + ";" + NAO_CONCLUIDA);
+       
+       PreencherTabela(); 
+           
+    }//GEN-LAST:event_jButtonAdicionarTarefaActionPerformed
+    
+    public boolean hasTarefaRepetida (String novaTarefa){ 
+        for (String tarefa : tarefas) {
+            String dados [] = tarefa.split(";");
+                    
+            if (novaTarefa.toLowerCase().equals(dados [0].toLowerCase())){
+                return true;
+            }
+}
+        
+        return false;
+        
+  
+    } 
+    private void preencherTabela(){
+            ArrayList<String>listaTarefas;
+            
+            if(jComboBoxFiltroStatus.getSelectedIndex() > 0){ 
+                listaTarefas = tarefasFiltradas; 
+            }
+                    
+            
+        
+     
+    
+    
+     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
